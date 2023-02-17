@@ -22,7 +22,7 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/Sirox228/luajit luajit
+          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
           sudo chmod -R 777 /home/runner/work/luajit
 
       - name: Setup Android NDK
@@ -60,7 +60,7 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/Sirox228/luajit luajit
+          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
           sudo chmod -R 777 /home/runner/work/luajit
 
       - name: Setup Android NDK
@@ -99,7 +99,7 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/Sirox228/luajit luajit
+          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
           sudo chmod -R 777 /home/runner/work/luajit
 
       - name: Setup Android NDK
@@ -138,7 +138,7 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/Sirox228/luajit luajit
+          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
           sudo chmod -R 777 /home/runner/work/luajit
 
       - name: Setup Android NDK
@@ -169,7 +169,7 @@ jobs:
     steps:
       # Runs a set of commands using the runners shell
       - name: Setup
-        run: git clone --recurse-submodules https://github.com/Sirox228/luajit
+        run: git clone --recurse-submodules https://github.com/MAJigsaw77/luajit
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -208,7 +208,7 @@ jobs:
           sudo apt install make -y
           sudo apt install clang -y
           sudo apt install build-essential -y
-          git clone --recurse-submodules https://github.com/Sirox228/luajit luajit
+          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
           
       - name: Build
         run: |
