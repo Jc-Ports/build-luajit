@@ -1,4 +1,4 @@
 [submodule "luajit"]
 	path = luajit
-	url = https://github.com/LuaJIT/LuaJIT
-	tag = v2.1.0-beta3
+	url = https://github.com/LuaJIT/LuaJIT.git
+	branch = v2.1.0-beta3
