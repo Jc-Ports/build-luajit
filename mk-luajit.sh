@@ -16,29 +16,6 @@ elif [ $(uname) = "Darwin" ]; then
 	HOST_ARCH="darwin-x86-64"
 fi
 
-function check_NDK() {
-    [[ -n $NDK ]] || export NDK=/opt/android-ndk
-    if [ ! -d "$NDK" ]; then
-        echo 'NDK not found. Please set NDK environment variable and have it point to the NDK dir.'
-        exit 1
-    fi
-
-    echo "Using NDKABI ${NDKABI}."
-
-    NDKVER=$(grep -oP 'r\K([0-9]+)(?=[a-z])' ${NDK}/CHANGELOG.md | head -1)
-    echo "Detected NDK version ${NDKVER}..."
-    if [ "$NDKVER" -lt 15 ]; then
-        echo 'NDK not of the right version, please update to NDK version 15 or higher.'
-        exit 1
-    fi
-}
-# In a nutshell, we need that to load 32 bit minilua and compile for 32 bits
-function install_32bits() {
-    sudo apt-get install gcc-multilib && echo "Finished installing gcc-multilib"
-}
-
-# NOTE: Since https://github.com/koreader/koreader-base/pull/1133, we append -DLUAJIT_SECURITY_STRHASH=0 -DLUAJIT_SECURITY_STRID=0 to TARGET_CFLAGS on !Android platforms.
-# Here, we leave it at the defaults, because we have much less control over the environment on Android, so, better be safe than sorry ;).
 case "$1" in
     clean)
         make -C luajit clean
@@ -46,8 +23,6 @@ case "$1" in
     armeabi-v7a)
         # Android/ARM, armeabi-v7a (ARMv7 VFP)
         NDKABI=${NDKABI:-14}
-        check_NDK
-	install_32bits
         TCVER=("${NDK}"/toolchains/arm-linux-androideabi-4.*)
         NDKP=${TCVER[0]}/prebuilt/${HOST_ARCH}/bin/arm-linux-androideabi-
         NDKF="--sysroot ${NDK}/platforms/android-${NDKABI}/arch-arm"
@@ -57,7 +32,6 @@ case "$1" in
     arm64-v8a)
         # Android/ARM, arm64-v8a (ARM64 VFP4, NEON)
         NDKABI=${NDKABI:-21}
-        check_NDK
         TCVER=("${NDK}"/toolchains/aarch64-linux-android-4.*)
         NDKP=${TCVER[0]}/prebuilt/${HOST_ARCH}/bin/aarch64-linux-android-
         NDKF="--sysroot ${NDK}/platforms/android-${NDKABI}/arch-arm64"
@@ -66,8 +40,6 @@ case "$1" in
     x86)
         # Android/x86, x86 (i686 SSE3)
         NDKABI=${NDKABI:-14}
-        check_NDK
-	install_32bits
         TCVER=("${NDK}"/toolchains/x86-4.*)
         NDKP=${TCVER[0]}/prebuilt/${HOST_ARCH}/bin/i686-linux-android-
         NDKF="--sysroot ${NDK}/platforms/android-${NDKABI}/arch-x86"
@@ -76,14 +48,9 @@ case "$1" in
     x86_64)
         # Android/x86_64, x86_64
         NDKABI=${NDKABI:-21}
-        check_NDK
         TCVER=("${NDK}"/toolchains/x86_64-4.*)
         NDKP=${TCVER[0]}/prebuilt/${HOST_ARCH}/bin/x86_64-linux-android-
         NDKF="--sysroot ${NDK}/platforms/android-${NDKABI}/arch-x86_64"
         make -C luajit HOST_CC="gcc" CFLAGS="-O2 -pipe" HOST_CFLAGS="-O2 -pipe -mtune=generic" LDFLAGS="" HOST_LDFLAGS="" TARGET_CFLAGS="${CFLAGS}" TARGET_LDFLAGS="${LDFLAGS}" TARGET_LIBS="${EXTRA_LIBS}" TARGET_SONAME="libluajit.so" INSTALL_SONAME="libluajit.so" CROSS="$NDKP" TARGET_FLAGS="${NDKF}" TARGET_SYS=Linux DESTDIR="${DEST}" PREFIX=
-        ;;
-    *)
-        echo 'specify one of "armeabi-v7a", "arm64-v8a", "x86", "x86_64" or "clean" as first argument'
-        exit 1
         ;;
 esac
