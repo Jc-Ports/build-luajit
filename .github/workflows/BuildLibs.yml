@@ -22,28 +22,22 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
-          sudo chmod -R 777 /home/runner/work/luajit
+          sudo apt install gcc-multilib -y
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r15c
+          ndk-version: r21e
           
       - name: Build
         run: |
-          cd /home/runner/work/luajit/luajit/luajit
+          sudo chmod -R 777 /home/runner/work/luajit/ 
           ./mk-luajit.sh armeabi-v7a
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: shared-luajit-Arm
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.so
 
       - uses: actions/upload-artifact@v2
         with:
-          name: static-luajit-Arm
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.a
+          name: luajit-arm
+          path: luajit
 
   buildArm64:
     # The type of runner that the job will run on
@@ -60,28 +54,22 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
-          sudo chmod -R 777 /home/runner/work/luajit
+          sudo apt install gcc-multilib -y
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r15c
+          ndk-version: r21e
           
       - name: Build
         run: |
-          cd /home/runner/work/luajit/luajit/luajit
+          sudo chmod -R 777 ./
           ./mk-luajit.sh arm64-v8a
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: shared-luajit-Aarch64
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.so
 
       - uses: actions/upload-artifact@v2
         with:
-          name: static-luajit-Aarch64
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.a
+          name: luajit-arch64
+          path: luajit
 
   # This workflow contains a single job called "build"
   buildx86:
@@ -99,28 +87,22 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
-          sudo chmod -R 777 /home/runner/work/luajit
+          sudo apt install gcc-multilib -y
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r15c
+          ndk-version: r21e
           
       - name: Build
         run: |
-          cd /home/runner/work/luajit/luajit/luajit
+          sudo chmod -R 777 ./
           ./mk-luajit.sh x86
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: shared-luajit-x86
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.so
 
       - uses: actions/upload-artifact@v2
         with:
-          name: static-luajit-x86
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.a
+          name: luajit-x86
+          path: luajit
 
   # This workflow contains a single job called "build"
   buildx86_64:
@@ -138,28 +120,22 @@ jobs:
           sudo apt install clang -y
           sudo apt install build-essential -y
           sudo apt install zip -y
-          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
-          sudo chmod -R 777 /home/runner/work/luajit
-
+          sudo apt install gcc-multilib -y
+         
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r15c
+          ndk-version: r21e
           
       - name: Build
         run: |
-          cd /home/runner/work/luajit/luajit/luajit
+          sudo chmod -R 777 ./
           ./mk-luajit.sh x86_64
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: shared-luajit-x86_64
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.so
 
       - uses: actions/upload-artifact@v2
         with:
-          name: static-luajit-x86_64
-          path: /home/runner/work/luajit/luajit/luajit/luajit/src/libluajit.a
+          name: luajit-x86_64
+          path: luajit
 
   build-windows:
     # The type of runner that the job will run on
@@ -168,31 +144,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Runs a set of commands using the runners shell
-      - name: Setup
-        run: git clone --recurse-submodules https://github.com/MAJigsaw77/luajit
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
           
       - name: Build
         run: |
-          cd luajit/luajit/src
+          cd luajit/src
           ./msvcbuild.bat
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: luajit-dll-windows
-          path: luajit/luajit/src/lua51.dll
 
       - uses: actions/upload-artifact@v2
         with:
-          name: luajit-lib-windows
-          path: luajit/luajit/src/luajit.lib
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: luajit-exe-windows
-          path: luajit/luajit/src/luajit.exe
+          name: luajit-windows
+          path: luajit
 
   build-linux-64:
     # The type of runner that the job will run on
@@ -208,24 +172,13 @@ jobs:
           sudo apt install make -y
           sudo apt install clang -y
           sudo apt install build-essential -y
-          git clone --recurse-submodules https://github.com/MAJigsaw77/luajit luajit
-          
+
       - name: Build
         run: |
           cd luajit/luajit
           make
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: linux-luajit-lib-static-64
-          path: luajit/luajit/src/libluajit.a
 
       - uses: actions/upload-artifact@v2
         with:
-          name: linux-luajit-lib-shared-64
-          path: luajit/luajit/src/libluajit.so
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: linux-luajit-commandline-64
-          path: luajit/luajit/src/luajit
+          name: luajit-linux
+          path: luajit
