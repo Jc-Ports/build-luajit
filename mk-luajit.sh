@@ -9,29 +9,12 @@ NDK=/opt/hostedtoolcache/ndk/r15c/x64
 # For 64 bits (arm64-v8a and x86_64) we built against platform-21 (Lollipop)
 
 DEST=$(cd "$(dirname "$0")" && pwd)/build/$1
-# might be linux-x86_64 or darwin-x86-64
-HOST_ARCH="linux-x86_64"
 
-# Reverse patch will succeed if the patch is already applied.
-# In case of failure, it means we should try to apply the patch.
-#function do_patch() {
-#    local patch_file="${1}"
-#    if ! patch -d luajit -R -p1 -N --dry-run <"${patch_file}" >/dev/null 2>&1; then
-        # Now patch for real.
-#        if ! patch -d luajit -p1 -N <"${patch_file}"; then
-#            exit $?
-#        fi
-#    fi
-#}
-
-# do_patch "koreader-luajit-makefile-tweaks.patch"
-# do_patch "koreader-luajit-mcode-reserve-hack.patch"
-
-# In debug builds, we patch LuaJIT some more to grok what happens with mcode allocations
-#if [[ "$2" == "debug" ]]; then
-#    do_patch "koreader-luajit-mcode-debug.patch"
-#    EXTRA_LIBS="-landroid -llog"
-#fi
+if [ $(uname) = "Linux" ]; then
+	HOST_ARCH="linux-x86_64"
+elif [ $(uname) = "Darwin" ]; then
+	HOST_ARCH="darwin-x86-64"
+fi
 
 function check_NDK() {
     [[ -n $NDK ]] || export NDK=/opt/android-ndk
@@ -53,8 +36,9 @@ function check_NDK() {
 function install_32bits() {
     sudo apt-get install gcc-multilib && echo "Finished installing gcc-multilib"
 }
-## NOTE: Since https://github.com/koreader/koreader-base/pull/1133, we append -DLUAJIT_SECURITY_STRHASH=0 -DLUAJIT_SECURITY_STRID=0 to TARGET_CFLAGS on !Android platforms.
-##       Here, we leave it at the defaults, because we have much less control over the environment on Android, so, better be safe than sorry ;).
+
+# NOTE: Since https://github.com/koreader/koreader-base/pull/1133, we append -DLUAJIT_SECURITY_STRHASH=0 -DLUAJIT_SECURITY_STRID=0 to TARGET_CFLAGS on !Android platforms.
+# Here, we leave it at the defaults, because we have much less control over the environment on Android, so, better be safe than sorry ;).
 case "$1" in
     clean)
         make -C luajit clean
