@@ -9,8 +9,18 @@ jobs:
         arch: [armeabi-v7a, arm64-v8a, x86, x86_64]
 
     steps:
-      - name: Setup
+      - name: Checkout
         uses: actions/checkout@main
+        with:
+          submodules: true
+
+      - name: Setup Android NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@main
+        with:
+          ndk-version: r21e
+
+      - name: Install Libraries
         run: |
           sudo apt install make -y
           sudo apt install clang -y
@@ -19,12 +29,6 @@ jobs:
           sudo apt install gcc-multilib -y
           git clone https://github.com/LuaJIT/LuaJIT.git luajit -b v2.1.0-beta3
           sudo chmod -R 777 *
-
-      - name: Setup Android NDK
-        id: setup-ndk
-        uses: nttld/setup-ndk@main
-        with:
-          ndk-version: r21e
 
       - name: Build
         run: ./mk-luajit.sh ${{matrix.arch}}
