@@ -56,7 +56,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Setup
         run: |
-          brew install make llvm -y
+          brew install make
+          brew install llvm
           git clone https://github.com/LuaJIT/LuaJIT.git luajit -b v2.1.0-beta3
           
       - name: Build
@@ -66,5 +67,5 @@ jobs:
           
       - uses: actions/upload-artifact@v2
         with:
-          name: luajit-linux
+          name: luajit-macos
           path: luajit
