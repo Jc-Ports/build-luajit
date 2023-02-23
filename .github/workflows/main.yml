@@ -42,7 +42,7 @@ jobs:
           cd luajit
           make
           
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@main
         with:
           name: luajit-linux
           path: luajit
@@ -65,7 +65,7 @@ jobs:
           cd luajit
           make
           
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@main
         with:
           name: luajit-macos
           path: luajit
