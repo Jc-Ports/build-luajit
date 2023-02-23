@@ -34,11 +34,29 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Setup
         run: |
-          sudo apt update -y
-          sudo apt upgrade -y
-          sudo apt install make -y
-          sudo apt install clang -y
-          sudo apt install build-essential -y
+          sudo apt-get install make clang build-essential -y
+          git clone https://github.com/LuaJIT/LuaJIT.git luajit -b v2.1.0-beta3
+          
+      - name: Build
+        run: |
+          cd luajit
+          make
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: luajit-linux
+          path: luajit
+
+  build-macos:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Runs a set of commands using the runners shell
+      - name: Setup
+        run: |
+          brew install make llvm -y
           git clone https://github.com/LuaJIT/LuaJIT.git luajit -b v2.1.0-beta3
           
       - name: Build
