@@ -63,7 +63,7 @@ jobs:
       - name: Build
         run: |
           cd luajit
-          make MACOSX_DEPLOYMENT_TARGET=10.14
+          make MACOSX_DEPLOYMENT_TARGET=10.9
           
       - uses: actions/upload-artifact@main
         with:
